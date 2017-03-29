@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+# Dear future self: You used to suck at code. You probably still do.
 
 from scapy.all import *
 from random import randrange

