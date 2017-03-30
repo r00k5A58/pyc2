@@ -3,11 +3,11 @@ simple c2 written in python2 to demonstrate security concepts. use icmp echo req
 
 requires scapy (pip install scapy)
 
-enter the c2 IP address in the c2_config.py file.
+on a client computer, enter the c2 IP address in the c2_config.py file.
 
-command_list should be a list of commands, one per line, exactly how you would enter it into the cli. use echo >> command_list to add new commands to the file:
+command_list.*client id* should be a list of commands, one per line, exactly how you would enter it into the cli. use echo >> command_list to add new commands to the file:
 
-echo "cat /etc/passwd" >> command_list
+echo "cat /etc/passwd" >> command_list.*client id*
 
 probably won't work on windows (i tried to get scapy running on windows 10 and gave up, you might have better success)
 
