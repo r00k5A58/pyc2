@@ -1,5 +1,5 @@
 # pyc2
-simple c2 written in python2 to demonstrate security concepts. use icmp echo requests and replies to trade base64 encoded commands and replies. Video explaining some of the security concepts and implementation decisions: https://www.youtube.com/watch?v=ggYRh0w3cPk
+simple c2 written in python2 to demonstrate security concepts. use icmp echo requests and replies to trade base64 encoded commands and replies. Video explaining some of the security concepts and implementation decisions: https://www.youtube.com/watch?v=DHrEn7oK9vQ
 
 requires scapy (pip install scapy)
 
